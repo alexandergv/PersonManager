@@ -63,7 +63,11 @@ namespace PersonManager.Models
 
         public static List<Person> UpdateRecord(Person person)
         {
-            var Index = Added.Where(x => true);
+            var Index = Added.FindIndex(x => x.Id == person.Id);
+
+            Added[Index].Name = person.Name;
+            Added[Index].Age = person.Age;
+        
             return Added;
         }
 
