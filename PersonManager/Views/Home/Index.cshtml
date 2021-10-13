@@ -1,0 +1,136 @@
+﻿@model PersonManager.Models.Person
+<!Doctype html>
+<html>
+<head>
+
+</head>
+<body>
+    <h3>Registro Personas</h3>
+    <hr />
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+    {
+        <div class="container">
+            <form>
+                <div class="form-group row">
+                    <label for="nombre" class="col-sm-1">Nombre:</label>
+                    <div class="col-sm-0">
+                        @Html.EditorFor(Model => Model.Name)
+                        @Html.ValidationMessageFor(Model => Model.Name)
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-1">Edad: </label>
+                    <div class="col-sm-0">
+                        @Html.EditorFor(Model => Model.Age)
+                        @Html.ValidationMessageFor(Model => Model.Age)
+                    </div>
+
+                </div>
+                <div>
+                    <input type="submit" value="Ingresar" class="btn btn-primary" id="btnSubmit" />
+                </div>
+            </form>
+        </div>
+    }
+    <hr />
+
+    <div class="container">
+        <h2> Lista de Personas</h2>
+        <br />
+        <table>
+            <thead>
+                <tr>
+                    <td class="col-sm-1">ID</td>
+                    <td class="col-sm-1">Nombre</td>
+                    <td class="col-sm-1">Edad</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dataRow in ViewBag.TablaP)
+                {
+                    <tr>
+                        <td>@dataRow.Id</td>
+                        <td>@dataRow.Name</td>
+                        <td>@dataRow.Age</td>
+                        @using (Html.BeginForm("DeleteRow", "Home", FormMethod.Post))
+                        {
+                            <form>
+                                @Html.HiddenFor(model => model.Id, new { Value =  dataRow.Id })
+                                @Html.HiddenFor(model => model.Name, new { Value = dataRow.Name })
+                                @Html.HiddenFor(model => model.Age, new { Value = dataRow.Age })
+                                <td><input type="submit" value="borrar" /></td>
+                              </form>
+                        }
+                    <td><input type="button" value="Editar" id="btnEdit" onclick="showEdit(@dataRow.Id)" /></td>
+                    </tr>
+                    <tr hidden id="editData_@dataRow.Id">
+                        <br />
+                        @using (Html.BeginForm("UpdateRecord", "Home", FormMethod.Post))
+                        {
+                    <form>
+                        <td>@Html.HiddenFor(Model => Model.Id, new { Value = dataRow.Id })</td>
+                        <td class="col-sm-4">
+                            <label> Nombre: </label>
+                            @Html.EditorFor(Model => Model.Name, new { htmlAttributes = new { @Value = dataRow.Name } })
+                        </td>
+                        <td class="col-sm-4">
+                            <label>Edad: </label>
+                            @Html.EditorFor(Model => Model.Age, new { htmlattributes = new { @Value = dataRow.Age } })
+                        </td>
+                        <td class="col-sm-4">
+                            <input type="submit" value="Guardar" class="btn-danger" />
+                        </td>
+                    </form>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <hr />
+    <div class="container">
+        <div class="col-sm-4">
+            @using (Html.BeginForm("GetOlder", "Home", FormMethod.Get))
+            {
+                <form class="form-group row">
+                    <input type="submit" class="btn btn-success" value="Mostrar Mayor edad" />
+                </form>
+            }
+        </div>
+        <div class="col-sm-6">
+            @using (Html.BeginForm("GetCommon", "Home", FormMethod.Get))
+            {
+                <form class="form-group row">
+                    <input type="submit" class="btn btn-success" value="Mostrar Edad mas común" />
+                </form>
+            }
+        </div>
+        <div class="col-sm-2">
+            @using (Html.BeginForm("ShowAll", "Home", FormMethod.Get))
+            {
+                <form class="form-group row">
+                    <input type="submit" class="btn btn-success" value="Mostrar Todos" />
+                </form>
+            }
+        </div>
+    </div>
+    <script type="text/javascript">
+        function showEdit(id) {
+            console.log("HOla " + id);
+            console.log(txtInp);
+                var txtInp = document.getElementById("editData_" + id);
+
+            if (txtInp.hasAttribute("hidden")) {
+                txtInp.removeAttribute("hidden");
+            }
+            else
+            {
+                txtInp.setAttribute("hidden",true);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
