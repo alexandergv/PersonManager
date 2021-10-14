@@ -20,6 +20,10 @@ namespace PersonManager.Models
 
         public static List<Person> Persona(Person person)
         {
+            if(person.Age <18 || person.Age > 135)
+            {
+                return Added;
+            }    
             if (Added.Count > 0)
             {
                 person.Id = Added.Last().Id + 1;
